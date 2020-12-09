@@ -7,8 +7,9 @@ services:
       context: node
       dockerfile: Dockerfile
     container_name: app
-    # entrypoint: dockerize -wait tcp://db:3306 -timeout 20s npm install && npm run dev && node index.js
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s bash -c "npm install && npm node index.js"
+    # entrypoint: dockerize -wait tcp://db:3306 -timeout 20s node index.js
+    # entrypoint: dockerize -wait tcp://db:3306 -timeout 20s bash -c "npm install && node index.js"
+    entrypoint: dockerize -wait tcp://db:3306 bash -c "npm install && node index.js"
     networks: 
       - node-network
     volumes: 
@@ -27,6 +28,8 @@ services:
     tty: true
     volumes: 
       - ./mysql:/var/lib/mysql
+    ports: 
+      - "3306:3306"  
     environment: 
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
